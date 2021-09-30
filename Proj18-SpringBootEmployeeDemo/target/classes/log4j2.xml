@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="debug">
+	<appenders>
+		<Console name="Console-Appender" target="SYSTEM_OUT">
+			<PatternLayout>
+				<pattern>
+					[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n
+				</pattern>
+				>
+			</PatternLayout>
+		</Console>
+		<file name="File-Appender" fileName="logs/xmlfilelog.log">
+			<PatternLayout>
+				<pattern>
+					[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n
+				</pattern>
+			</PatternLayout>
+		</file>
+	</appenders>
+	<Loggers>
+		<Logger name="guru.springframework.blog.log4j2async"
+			level="debug">
+			<appenders-ref ref="File-Appender" />
+		</Logger>
+		<Root level="debug">
+			<appenders-ref ref="Console-Appender" />
+		</Root>
+	</Loggers>
+</configuration>

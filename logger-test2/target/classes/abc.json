@@ -1,0 +1,16 @@
+{
+  "firstName": "Gitanjali",
+  "lastName": "Verma",
+  "address": {
+    "addressLine1": "Dwarika Vihar",
+    "city": "Raipur",
+    "state": "Chhattisgarh",
+    "pincode": "India",
+    "country": "492001"
+  },
+  "creditCardDetail": {
+    "cardNumber": "1234567890123456",
+    "cvv": "123",
+    "expDate": "12/90"
+  }
+}
