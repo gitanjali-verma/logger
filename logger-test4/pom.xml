@@ -10,22 +10,30 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.digitaldots.logger-test</groupId>
-	<artifactId>logger-test3</artifactId>
+	<artifactId>logger-test4</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>logger-test3</name>
-	<description>logger-test3</description>
+	<name>logger-test4</name>
+	<description>logger-test4</description>
 	<properties>
 		<java.version>1.8</java.version>
 	</properties>
 	<dependencies>
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-api</artifactId>
-		</dependency>
-		<dependency>
+<!-- 		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+		</dependency> -->
+ 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-core</artifactId>
+		</dependency> 
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-slf4j-impl</artifactId>
 		</dependency>
+<!-- 		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+		</dependency> -->
 	</dependencies>
 
 </project>

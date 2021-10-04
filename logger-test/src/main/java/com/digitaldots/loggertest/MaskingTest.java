@@ -9,8 +9,10 @@ import org.json.JSONObject;
 
 public class MaskingTest {
     private static final Logger logger = LogManager.getLogger(MaskingTest.class);
+//    private static final Logger logger = (Logger) LoggerFactory.getLogger(MaskingTest.class);
 
     public static void main(String[] args) {
+        System.out.println("_______________________");
         Map<String, String> user = new HashMap<>();
         user.put("user_id", "87656");
         user.put("SSN", "786445563");
@@ -21,6 +23,10 @@ public class MaskingTest {
         user.put("email_id", "gitanjali@gmail.com");
 
         JSONObject userDetails = new JSONObject(user);
+        logger.error("User JSON: {}", userDetails);
         logger.info("User JSON: {}", userDetails);
+        logger.trace("User JSON: {}", userDetails);
+        logger.warn("User JSON: {}", userDetails);
+        logger.debug("User JSON: {}", userDetails);
     }
 }

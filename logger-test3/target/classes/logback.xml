@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration
+	xmlns="http://logging.apache.org/log4j/2.0/config" status="OFF"
+	packages="com.digitaldots.loggertest">
+	<appenders>
+		<Console name="STDOUT" target="SYSTEM_OUT">
+			<Pattern
+				pattern="%d{yyyy-MM-dd HH:mm:ss} [%thread] [%t] %-5level %logger{36} - %msg%n" />
+		</Console>
+	</appenders>
+	<appender name="logmask"
+		class="ch.qos.logback.core.ConsoleAppender">
+		<encoder
+			class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+			<layout class="com.digitaldots.loggertest.LogMaskingConverter">
+				<maskPattern>\"SSN\"\s*:\s*\"(.*?)\"</maskPattern> <!-- SSN JSON pattern -->
+				<maskPattern>\"address\"\s*:\s*\"(.*?)\"</maskPattern> <!-- Address JSON pattern -->
+				<maskPattern>(\d+\.\d+\.\d+\.\d+)</maskPattern> <!-- Ip address IPv4 pattern -->
+				<maskPattern>(\w+@\w+\.\w+)</maskPattern> <!-- Email pattern -->
+				<pattern>%-5p [%d{ISO8601,UTC}] [%thread] %c: %m%n%rootException
+				</pattern>
+			</layout>
+		</encoder>
+	</appender>
+	<loggers>
+		<Logger name="com.digitaldots.loggertest" level="all" />
+		<root level="all">
+			<appender-ref ref="STDOUT" />
+			<appender-ref ref="logmask" />
+		</root>
+	</loggers>
+</configuration>
+
