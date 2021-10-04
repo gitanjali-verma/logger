@@ -1,30 +1,15 @@
-<Configuration packages='com.digitaldots.loggertest'>
-	<Properties>
-		<Property name="logmask">
-			%d, level=%p, %cm
-		</Property>
-	</Properties>
-	<appender name="logmask"
-		class="ch.qos.logback.core.ConsoleAppender">
-		<encoder
-			class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
-			<layout class="com.digitaldots.loggertest.LogMaskingConverter">
-				<maskPattern>\"SSN\"\s*:\s*\"(.*?)\"</maskPattern> <!-- SSN JSON pattern -->
-				<maskPattern>\"address\"\s*:\s*\"(.*?)\"</maskPattern> <!-- Address JSON pattern -->
-				<maskPattern>(\d+\.\d+\.\d+\.\d+)</maskPattern> <!-- Ip address IPv4 pattern -->
-				<maskPattern>(\w+@\w+\.\w+)</maskPattern> <!-- Email pattern -->
-				<pattern>%-5p [%d{ISO8601,UTC}] [%thread] %c: %m%n%rootException</pattern>
-			</layout>
-		</encoder>
-	</appender>
-	<!-- <loggers> <logger name="org.apache.log4j.xml" level="info" /> </loggers> -->
-	<!-- <Loggers> <Logger name="org.apache.log4j.xml" level="info"> </Logger> 
-		<Root level="info"> </Root> </Loggers> -->
-
-	<!-- <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender"> 
-		<encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder"> <layout 
-		class="com.digitaldots.loggertest.LogMaskingConverter"> <maskPattern>creditCard=\d+</maskPattern> 
-		SourcePan pattern <pattern>%d{dd/MM/yyyy HH:mm:ss.SSS} [%thread] %-5level 
-		%logger{36} - %msg%n%ex</pattern> </layout> </encoder> </appender> -->
-
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+	<Appenders>
+		<Console name="LogMasking" target="SYSTEM_OUT">
+			<PatternLayout
+				pattern="%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %logmasking%n" />
+		</Console>
+	</Appenders>
+	<Loggers>
+		<Logger name="com.digitaldots.loggertest" level="INFO"
+			additivity="false">
+			<AppenderRef ref="LogMasking" />
+		</Logger>
+	</Loggers>
 </Configuration>

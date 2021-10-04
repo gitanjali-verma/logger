@@ -7,52 +7,75 @@ import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.config.plugins.Plugin;
 import org.apache.logging.log4j.core.pattern.ConverterKeys;
 import org.apache.logging.log4j.core.pattern.LogEventPatternConverter;
+import org.apache.logging.log4j.core.pattern.PatternConverter;
 
-@Plugin(name = "logmask", category = "Converter")
-@ConverterKeys("cm")
-class LogMaskingConverter extends LogEventPatternConverter {
-    private static final String NAME = "cm";
-//    private static final String JSON_REPLACEMENT_REGEX = "$1: ****";
-//    private static final String JSON_KEYS = "'ssn', 'private', 'creditCard'".join("|");
-//    private static final Pattern JSON_PATTERN = Pattern.compile(JSON_KEYS + "}): ([^]+)");
+@Plugin(name = "LogMaskingConverter", category = PatternConverter.CATEGORY)
+@ConverterKeys({ "logmasking" })
+public class LogMaskingConverter extends LogEventPatternConverter {
 
-    private static final String JSON_REPLACEMENT_REGEX = "*********";
+    private static final String NAME = "logmasking";
+
+//    private static final String CREDIT_CARD_REGEX = "((?:(?:\\d{4}[- ]){3}\\d{4}|\\d{16}))(?![\\d])";
+    private static final String CREDIT_CARD_REGEX = "([0-9]{4})[0-9]{0,9}([0-9]{4})";
+    private static final Pattern CREDIT_CARD_PATTERN = Pattern.compile(CREDIT_CARD_REGEX);
+    private static final String CAREDIT_CARD_REPLACEMENT_REGEX = "XXXXXXXXXXXXXXXX";
+
+    private static final String CVV_REGEX = "([0-9]{3})";
+    private static final Pattern CVV_PATTERN = Pattern.compile(CVV_REGEX);
+    private static final String CVV_REPLACEMENT_REGEX = "+++";
+
     private static final String SSN_REGEX = "([0-9]{9})";
-    private static final Pattern JSON_PATTERN = Pattern.compile(SSN_REGEX);
+//    private static final String SSN_REGEX = "^(?!666|000|9\\d{2})\\d{3}-(?!00)\\d{2}-(?!0{4})\\d{4}$";
+    private static final Pattern SSN_PATTERN = Pattern.compile(SSN_REGEX);
+    private static final String SSN_REPLACEMENT_REGEX = "*********";
 
-    LogMaskingConverter(String[] options) {
+    private LogMaskingConverter(String[] options) {
         super(NAME, NAME);
     }
 
-    static LogMaskingConverter newInstance(final String[] options) {
+    public static LogMaskingConverter newInstance(final String[] options) {
         return new LogMaskingConverter(options);
     }
 
     @Override
     public void format(LogEvent event, StringBuilder outputMessage) {
-        System.out.println("+++++++++++++++++++++++++");
         String message = event.getMessage().getFormattedMessage();
         String maskedMessage = message;
-
-        if (event.getMarker().getName() == LoggingMarkers.JSON.getName()) {
+        if (event.getMarker() != null && LoggingMarkers.JSON.getName().equals(event.getMarker().getName())) {
             try {
                 maskedMessage = mask(message);
             } catch (Exception e) {
-                maskedMessage = message; // Although if this fails, it may be better to not log the message
+                maskedMessage = message;
             }
         }
         outputMessage.append(maskedMessage);
     }
 
     private String mask(String message) {
-        System.out.println("+++++++++++++++++++++++++");
+        Matcher matcher = null;
         StringBuffer buffer = new StringBuffer();
-        Matcher matcher = JSON_PATTERN.matcher(message);
-        while (matcher.find()) {
-            matcher.appendReplacement(buffer, JSON_REPLACEMENT_REGEX);
+
+        if (message.contains("CREDIT_CARD")) {
+            matcher = CREDIT_CARD_PATTERN.matcher(message);
+            maskMatcher(matcher, buffer, CAREDIT_CARD_REPLACEMENT_REGEX);
+            message = buffer.toString();
+        } else if (message.contains("SSN")) {
+            matcher = SSN_PATTERN.matcher(message);
+            maskMatcher(matcher, buffer, SSN_REPLACEMENT_REGEX);
+            message = buffer.toString();
+        } else if (message.contains("CVV")) {
+            matcher = CVV_PATTERN.matcher(message);
+            maskMatcher(matcher, buffer, CVV_REPLACEMENT_REGEX);
+            message = buffer.toString();
         }
-        matcher.appendTail(buffer);
-        return buffer.toString();
+        return message;
     }
 
+    private StringBuffer maskMatcher(Matcher matcher, StringBuffer buffer, String maskStr) {
+        while (matcher.find()) {
+            matcher.appendReplacement(buffer, maskStr);
+        }
+        matcher.appendTail(buffer);
+        return buffer;
+    }
 }
