@@ -1,0 +1,4 @@
+com\digitaldots\loggertest\LoggingMarkers.class
+com\digitaldots\loggertest\LogMaskingConverter.class
+com\digitaldots\loggertest\MaskingTest.class
+META-INF\org\apache\logging\log4j\core\config\plugins\Log4j2Plugins.dat
